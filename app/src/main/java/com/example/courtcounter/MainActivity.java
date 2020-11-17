@@ -1,5 +1,6 @@
 package com.example.courtcounter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -8,9 +9,15 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView textScoreTeamA, textScoreTeamB;
+    // Constant keys for Bundle arguments
+    private static final String SCORE_TEAM_A = "scoreTeamA";
+    private static final String SCORE_TEAM_B = "scoreTeamB";
 
-    int scoreTeamA = 0, scoreTeamB = 0;
+    // TextViews to display the team scores
+    private TextView textScoreTeamA, textScoreTeamB;
+
+    // Variables to track the scores
+    private int scoreTeamA = 0, scoreTeamB = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +25,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textScoreTeamA = findViewById(R.id.team_A_score);
         textScoreTeamB = findViewById(R.id.team_B_score);
+
+        // Checking if there was a previous saved state or not
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SCORE_TEAM_A)) {
+                scoreTeamA = savedInstanceState.getInt(SCORE_TEAM_A);
+                displayScoreTeamA(scoreTeamA);
+            }
+            if (savedInstanceState.containsKey(SCORE_TEAM_B)) {
+                scoreTeamB = savedInstanceState.getInt(SCORE_TEAM_B);
+                displayScoreTeamB(scoreTeamB);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(SCORE_TEAM_A, scoreTeamA);
+        outState.putInt(SCORE_TEAM_B, scoreTeamB);
     }
 
     public void plusThreeTeamA(View view) {
